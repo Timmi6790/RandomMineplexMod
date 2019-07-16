@@ -1,0 +1,15 @@
+[
+{
+  "modid": "clansMod",
+  "name": "Clans Mod",
+  "description": "A Mineplex Clans Mod",
+  "version": "${version}",
+  "mcversion": "${mcversion}",
+  "url": "timmi6790.de",
+  "updateUrl": "",
+  "authorList": ["Timmi6790"],
+  "logoFile": "",
+  "screenshots": [],
+  "dependencies": []
+}
+]
