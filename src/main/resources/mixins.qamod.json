@@ -1,0 +1,10 @@
+{
+  "required": true,
+  "refmap": "mixins.qamod.refmap.json",
+  "package": "de.timmi6790.mcmod.mixins",
+  "compatibilityLevel": "JAVA_8",
+  "mixins": [
+    "blocks.MixinBlockBarrier",
+    "events.MixinNetworkManager"
+  ]
+}

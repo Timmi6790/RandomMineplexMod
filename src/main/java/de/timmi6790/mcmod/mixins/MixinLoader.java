@@ -1,5 +1,4 @@
-package de.timmi6790.clansMod.mixins;
-
+package de.timmi6790.mcmod.mixins;
 
 import net.minecraftforge.fml.relauncher.IFMLLoadingPlugin;
 import org.spongepowered.asm.launch.MixinBootstrap;
@@ -13,7 +12,7 @@ public class MixinLoader implements IFMLLoadingPlugin {
 
     public MixinLoader() {
         MixinBootstrap.init();
-        Mixins.addConfiguration("mixins.clansMod.json");
+        Mixins.addConfiguration("mixins.qamod.json");
         MixinEnvironment.getDefaultEnvironment().setSide(MixinEnvironment.Side.CLIENT);
     }
 
