@@ -12,6 +12,8 @@ import net.minecraft.util.EnumChatFormatting;
 public class BarrierCommand extends AbstractCommand {
     public BarrierCommand() {
         super("barrier");
+
+        this.setPrefix("Debug");
     }
 
     @Override
