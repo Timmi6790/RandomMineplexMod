@@ -1,32 +1,38 @@
 package de.timmi6790.mcmod;
 
 import de.timmi6790.mcmod.command.CommandManager;
-import de.timmi6790.mcmod.datatypes.TaskScheduler;
 import de.timmi6790.mcmod.listeners.events.EventListener;
 import de.timmi6790.mcmod.listeners.events.MineplexEventListener;
 import de.timmi6790.mcmod.modules.AbstractModule;
-import de.timmi6790.mcmod.modules.community.CommunityModule;
 import de.timmi6790.mcmod.tabsupport.TabSupportManager;
+import de.timmi6790.mcmod.utilities.TaskScheduler;
 import lombok.Getter;
+import lombok.extern.log4j.Log4j2;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.common.config.Configuration;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.Mod.EventHandler;
 import net.minecraftforge.fml.common.event.FMLInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
+import org.reflections.Reflections;
 
 import java.io.File;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Optional;
+import java.util.Set;
 
 @Mod(
-        modid = Reference.MODID, name = Reference.NAME, version = Reference.VERSION,
+        modid = Reference.MODID,
+        name = Reference.NAME,
+        version = Reference.VERSION,
         acceptedMinecraftVersions = Reference.MC_VERSION,
-        guiFactory = Reference.GUI_FACTORY_CLASS, clientSideOnly = true
+        guiFactory = Reference.GUI_FACTORY_CLASS,
+        clientSideOnly = true
 )
+@Log4j2
 public class McMod {
-    private static final Map<String, AbstractModule> modules = new HashMap<>();
+    private static final Map<Class<? extends AbstractModule>, AbstractModule> modules = new HashMap<>();
     @Getter
     private static final ModCache modCache = new ModCache();
     @Getter
@@ -41,16 +47,16 @@ public class McMod {
 
     private static void addModules(final AbstractModule... modules) {
         for (final AbstractModule module : modules) {
-            McMod.modules.put(module.getName().toLowerCase(), module);
+            McMod.modules.put(module.getClass(), module);
         }
     }
 
-    public static Optional<AbstractModule> getModule(final String name) {
-        return Optional.ofNullable(modules.get(name.toLowerCase()));
+    public static <T extends AbstractModule> Optional<T> getModule(final Class<T> clazz) {
+        return (Optional<T>) Optional.ofNullable(modules.get(clazz));
     }
 
-    public static AbstractModule getModuleOrThrow(final String name) {
-        return getModule(name).orElseThrow(RuntimeException::new);
+    public static <T extends AbstractModule> T getModuleOrThrow(final Class<T> clazz) {
+        return getModule(clazz).orElseThrow(RuntimeException::new);
     }
 
     public static void registerEvents(final Object... events) {
@@ -67,9 +73,15 @@ public class McMod {
 
     @EventHandler
     public void preInit(final FMLPreInitializationEvent event) {
-        McMod.addModules(
-                new CommunityModule()
-        );
+        final Reflections reflections = new Reflections("de.timmi6790.mcmod.modules");
+        final Set<Class<? extends AbstractModule>> modules = reflections.getSubTypesOf(AbstractModule.class);
+        for (final Class<? extends AbstractModule> module : modules) {
+            try {
+                addModules(module.getConstructor().newInstance());
+            } catch (final Exception e) {
+                log.error(String.format("Error while trying to initialize module %s.", module), e);
+            }
+        }
 
         configDirectory = event.getModConfigurationDirectory().toString();
         if (configuration == null) {
@@ -77,8 +89,8 @@ public class McMod {
             configuration = new Configuration(path);
         }
 
-        for (final AbstractModule module : modules.values()) {
-            System.out.printf("PreInnit module %s%n", module.getName());
+        for (final AbstractModule module : McMod.modules.values()) {
+            log.info("PreInnit module {}", module.getName());
             module.preInit(event);
         }
     }
@@ -86,7 +98,7 @@ public class McMod {
     @EventHandler
     public void init(final FMLInitializationEvent event) {
         for (final AbstractModule module : modules.values()) {
-            System.out.printf("Innit module %s%n", module.getName());
+            log.info("Innit module {}", module.getName());
             module.init(event);
         }
 

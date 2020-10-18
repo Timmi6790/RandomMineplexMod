@@ -1,7 +1,7 @@
 package de.timmi6790.mcmod.modules.community.fixes;
 
-import de.timmi6790.mcmod.datatypes.MessageBuilder;
 import de.timmi6790.mcmod.events.PacketReceiveEvent;
+import de.timmi6790.mcmod.utilities.MessageBuilder;
 import net.minecraft.network.Packet;
 import net.minecraft.network.play.server.S1DPacketEntityEffect;
 import net.minecraft.potion.Potion;

@@ -1,6 +1,6 @@
 {
   "required": true,
-  "refmap": "mixins.qamod.refmap.json",
+  "refmap": "mixins.randomMineplexMod.refmap.json",
   "package": "de.timmi6790.mcmod.mixins",
   "compatibilityLevel": "JAVA_8",
   "mixins": [

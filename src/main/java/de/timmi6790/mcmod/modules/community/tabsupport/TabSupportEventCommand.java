@@ -1,10 +1,10 @@
 package de.timmi6790.mcmod.modules.community.tabsupport;
 
+import de.timmi6790.commons.utilities.EnumUtilities;
 import de.timmi6790.mcmod.McMod;
 import de.timmi6790.mcmod.tabsupport.AbstractTabSupport;
 import de.timmi6790.mcmod.tabsupport.TabSupportData;
 import de.timmi6790.mcmod.utilities.DataUtilities;
-import de.timmi6790.mcmod.utilities.EnumUtilities;
 import de.timmi6790.mcmod.values.BukkitValues;
 import lombok.Getter;
 

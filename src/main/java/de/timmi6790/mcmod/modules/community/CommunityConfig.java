@@ -24,7 +24,7 @@ public class CommunityConfig {
         this.showBarrierBlocks = this.configuration.getBoolean("showBarrierBlocks", Configuration.CATEGORY_GENERAL, false, "");
         this.fakeAcceptTexturePack = this.configuration.getBoolean("fakeAcceptTexturePack", Configuration.CATEGORY_GENERAL, true, "");
 
-        final CommunityCache cache = ((CommunityModule) McMod.getModuleOrThrow("Community")).getCache();
+        final CommunityCache cache = McMod.getModuleOrThrow(CommunityModule.class).getCache();
         cache.setShowBarrier(this.showBarrierBlocks);
 
         if (this.configuration.hasChanged()) {

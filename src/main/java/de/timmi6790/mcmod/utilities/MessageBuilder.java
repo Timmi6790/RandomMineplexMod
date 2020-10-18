@@ -1,7 +1,6 @@
-package de.timmi6790.mcmod.datatypes;
+package de.timmi6790.mcmod.utilities;
 
 import de.timmi6790.mcmod.McMod;
-import de.timmi6790.mcmod.utilities.Shortcuts;
 import net.minecraft.event.ClickEvent;
 import net.minecraft.event.HoverEvent;
 import net.minecraft.util.ChatComponentText;

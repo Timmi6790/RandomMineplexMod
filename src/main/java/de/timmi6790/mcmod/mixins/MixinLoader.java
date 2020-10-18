@@ -12,7 +12,7 @@ public class MixinLoader implements IFMLLoadingPlugin {
 
     public MixinLoader() {
         MixinBootstrap.init();
-        Mixins.addConfiguration("mixins.qamod.json");
+        Mixins.addConfiguration("mixins.randomMineplexMod.json");
         MixinEnvironment.getDefaultEnvironment().setSide(MixinEnvironment.Side.CLIENT);
     }
 

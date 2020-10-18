@@ -1,11 +1,11 @@
 package de.timmi6790.mcmod.listeners.events;
 
+import de.timmi6790.commons.utilities.EnumUtilities;
 import de.timmi6790.mcmod.McMod;
 import de.timmi6790.mcmod.ModCache;
 import de.timmi6790.mcmod.events.PacketReceiveEvent;
 import de.timmi6790.mcmod.events.mineplex.MineplexServerChangeEvent;
 import de.timmi6790.mcmod.events.mineplex.MineplexServerJoinEvent;
-import de.timmi6790.mcmod.utilities.EnumUtilities;
 import de.timmi6790.mcmod.utilities.StringUtilities;
 import de.timmi6790.mcmod.values.MineplexGames;
 import net.minecraft.network.play.server.S47PacketPlayerListHeaderFooter;

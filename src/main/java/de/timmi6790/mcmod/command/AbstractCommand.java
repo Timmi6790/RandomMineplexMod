@@ -1,8 +1,8 @@
 package de.timmi6790.mcmod.command;
 
 import de.timmi6790.mcmod.command.exceptions.CommandException;
-import de.timmi6790.mcmod.datatypes.MessageBuilder;
 import de.timmi6790.mcmod.utilities.DataUtilities;
+import de.timmi6790.mcmod.utilities.MessageBuilder;
 import net.minecraft.command.CommandBase;
 import net.minecraft.command.ICommandSender;
 import net.minecraft.util.EnumChatFormatting;

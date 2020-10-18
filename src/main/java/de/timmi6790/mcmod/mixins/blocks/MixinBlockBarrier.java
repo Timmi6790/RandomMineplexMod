@@ -14,7 +14,7 @@ public class MixinBlockBarrier {
      */
     @Overwrite
     public int getRenderType() {
-        if (((CommunityModule) McMod.getModuleOrThrow("Community")).getCache().isShowBarrier()) {
+        if (McMod.getModuleOrThrow(CommunityModule.class).getCache().isShowBarrier()) {
             return 3;
         }
         return -1;

@@ -2,6 +2,7 @@ package de.timmi6790.mcmod.modules.community;
 
 import de.timmi6790.mcmod.McMod;
 import de.timmi6790.mcmod.modules.AbstractModule;
+import de.timmi6790.mcmod.modules.community.commands.BarrierCommand;
 import de.timmi6790.mcmod.modules.community.fixes.ClansTexturePackDenyFix;
 import de.timmi6790.mcmod.modules.community.fixes.CrashPotionFix;
 import de.timmi6790.mcmod.modules.community.tabsupport.ImmortalGiveTabSupport;
@@ -32,6 +33,10 @@ public class CommunityModule extends AbstractModule {
                 new CrashPotionFix(),
                 new ClansTexturePackDenyFix(),
                 this.config
+        );
+
+        McMod.getCommandManager().addCommands(
+                new BarrierCommand()
         );
 
         McMod.getTabSupportManager().registerTabSupports(

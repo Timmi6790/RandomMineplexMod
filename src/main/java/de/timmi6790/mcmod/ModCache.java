@@ -13,10 +13,10 @@ public class ModCache {
 
     public String getCurrentServerGroup() {
         final int splitPosition = this.currentServer.indexOf('-');
-
         if (splitPosition == -1) {
             return this.currentServer;
         }
+        
         return this.currentServer.substring(0, splitPosition);
     }
 }

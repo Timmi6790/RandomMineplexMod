@@ -1,4 +1,4 @@
-package de.timmi6790.mcmod.datatypes;
+package de.timmi6790.mcmod.utilities;
 
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
