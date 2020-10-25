@@ -1,17 +1,21 @@
 package de.timmi6790.mpmod.modules.community.fixes;
 
-import de.timmi6790.mpmod.McMod;
 import de.timmi6790.mpmod.events.PacketSendEvent;
 import de.timmi6790.mpmod.modules.community.CommunityModule;
 import de.timmi6790.mpmod.utilities.MessageBuilder;
+import lombok.Data;
 import net.minecraft.network.play.client.C19PacketResourcePackStatus;
 import net.minecraft.util.EnumChatFormatting;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 
+@Data
 public class ClansTexturePackDenyFix {
+    private final CommunityModule communityModule;
+
     @SubscribeEvent
     public void fakeResourcePackStatus(final PacketSendEvent.Pre event) {
-        if (!(event.getPacket() instanceof C19PacketResourcePackStatus) || !McMod.getModuleOrThrow(CommunityModule.class).getConfig().isFakeAcceptTexturePack()) {
+        if (!(event.getPacket() instanceof C19PacketResourcePackStatus)
+                || !this.communityModule.getConfig().isFakeAcceptTexturePack()) {
             return;
         }
 

@@ -3,10 +3,12 @@ package de.timmi6790.mpmod.command;
 import de.timmi6790.mpmod.command.exceptions.CommandException;
 import de.timmi6790.mpmod.utilities.DataUtilities;
 import de.timmi6790.mpmod.utilities.MessageBuilder;
+import lombok.NonNull;
 import net.minecraft.command.CommandBase;
 import net.minecraft.command.ICommandSender;
 import net.minecraft.util.EnumChatFormatting;
 import org.apache.commons.lang3.StringUtils;
+import org.checkerframework.checker.nullness.qual.Nullable;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -14,7 +16,7 @@ import java.util.List;
 
 public abstract class AbstractCommand extends CommandBase {
     private final String name;
-    private final List<String> aliases;
+    private final List<String> aliases = new ArrayList<>();
     private String prefix;
     private int minArgs = 0;
 
@@ -32,14 +34,14 @@ public abstract class AbstractCommand extends CommandBase {
         this(name, prefix, null);
     }
 
-    public AbstractCommand(final String name, final String prefix, final List<String> aliases) {
+    public AbstractCommand(@NonNull final String name,
+                           @Nullable final String prefix,
+                           @Nullable final List<String> aliases) {
         this.name = name;
         this.prefix = prefix;
 
-        if (aliases == null) {
-            this.aliases = new ArrayList<>();
-        } else {
-            this.aliases = aliases;
+        if (aliases != null) {
+            this.aliases.addAll(aliases);
         }
     }
 
@@ -90,7 +92,9 @@ public abstract class AbstractCommand extends CommandBase {
 
     protected void returnTellMissingArgs() {
         new MessageBuilder(StringUtils.capitalize(this.getCommandName()) + "-Command\n", EnumChatFormatting.GOLD)
-                .addMessage("\n" + "/" + this.getCommandName() + " " + this.getCommandName() + " " + String.join(" ", this.getSyntax()), EnumChatFormatting.YELLOW).sendToPlayerWithBox();
+                .addMessage("\n" + "/" + this.getCommandName() + " " + this.getCommandName() + " " + String.join(" ", this.getSyntax()), EnumChatFormatting.YELLOW)
+                .addBoxedToMessage()
+                .sendToPlayer();
         this.returnTell(null);
     }
 

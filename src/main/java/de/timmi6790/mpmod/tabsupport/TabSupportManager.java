@@ -2,16 +2,15 @@ package de.timmi6790.mpmod.tabsupport;
 
 import com.google.common.collect.MultimapBuilder;
 import com.google.common.collect.SetMultimap;
-import de.timmi6790.mpmod.McMod;
 import de.timmi6790.mpmod.events.PacketReceiveEvent;
 import de.timmi6790.mpmod.events.PacketSendEvent;
 import de.timmi6790.mpmod.events.TabCompletionPreEvent;
+import de.timmi6790.mpmod.utilities.EventUtilities;
 import lombok.Getter;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiChat;
 import net.minecraft.network.play.client.C14PacketTabComplete;
 import net.minecraft.network.play.server.S3APacketTabComplete;
-import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.fml.common.eventhandler.EventPriority;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 
@@ -30,7 +29,7 @@ public class TabSupportManager {
     private String lastTabCompleteRequest;
 
     public TabSupportManager() {
-        McMod.registerEvents(this);
+        EventUtilities.registerEvents(this);
     }
 
     private void setReturnValue(final TabSupportData tabSupportData) {
@@ -68,10 +67,7 @@ public class TabSupportManager {
 
         final TabSupportData tabSupportData = new TabSupportData(((C14PacketTabComplete) event.getPacket()).getMessage(), new ArrayList<>());
         final TabCompletionPreEvent tabCompletionPreEvent = new TabCompletionPreEvent(tabSupportData);
-        try {
-            MinecraftForge.EVENT_BUS.post(tabCompletionPreEvent);
-        } catch (final Exception ignore) {
-        }
+        EventUtilities.postEventSave(tabCompletionPreEvent);
 
         if (tabCompletionPreEvent.isCanceled()) {
             event.setCanceled(true);

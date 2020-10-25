@@ -9,7 +9,6 @@ import java.util.Map;
 
 @IFMLLoadingPlugin.MCVersion("1.8.9")
 public class MixinLoader implements IFMLLoadingPlugin {
-
     public MixinLoader() {
         MixinBootstrap.init();
         Mixins.addConfiguration("mixins.randomMineplexMod.json");

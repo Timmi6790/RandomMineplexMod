@@ -1,10 +1,10 @@
 package de.timmi6790.mpmod.utilities;
 
-import com.github.benmanes.caffeine.cache.Cache;
+import com.github.benmanes.caffeine.cache.AsyncLoadingCache;
 import com.github.benmanes.caffeine.cache.Caffeine;
 import com.google.gson.JsonElement;
-import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
+import lombok.SneakyThrows;
 import lombok.experimental.UtilityClass;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.network.NetworkPlayerInfo;
@@ -24,38 +24,33 @@ import java.util.concurrent.TimeoutException;
 
 @UtilityClass
 public class PlayerUtilities {
-    private final Cache<UUID, String> playerNameCache = Caffeine.newBuilder()
+    private final AsyncLoadingCache<UUID, Optional<String>> playerNameCache = Caffeine.newBuilder()
             .maximumSize(1000)
             .expireAfterWrite(20, TimeUnit.MINUTES)
-            .build();
-
-    public Optional<String> uuidToName(final UUID uuid) {
-        final String playerName = playerNameCache.getIfPresent(uuid);
-        if (playerName != null) {
-            return Optional.of(playerName);
-        }
-
-        try {
-            CompletableFuture.runAsync(() -> {
+            .buildAsync(uuid -> {
                 try {
                     final URL url = new URL("https://sessionserver.mojang.com/session/minecraft/profile/" + PlayerUtilities.uuidShorter(uuid));
                     final URLConnection con = url.openConnection();
 
-                    final JsonElement element = new JsonParser().parse(new InputStreamReader(con.getInputStream(), StandardCharsets.UTF_8));
-                    final JsonObject jsonObject = element.getAsJsonObject();
+                    final JsonElement element = new JsonParser().parse(new InputStreamReader(
+                            con.getInputStream(),
+                            StandardCharsets.UTF_8
+                    ));
 
-                    final String name = jsonObject.get("name").getAsString();
-                    playerNameCache.put(uuid, name);
-
+                    return Optional.of(element.getAsJsonObject().get("name").getAsString());
                 } catch (final Exception ignore) {
+                    return Optional.empty();
                 }
-            }).get(20, TimeUnit.SECONDS);
-        } catch (final InterruptedException | ExecutionException | TimeoutException e) {
+            });
+
+    @SneakyThrows
+    public Optional<String> uuidToName(final UUID uuid) {
+        final CompletableFuture<Optional<String>> nameFuture = playerNameCache.get(uuid);
+        try {
+            return nameFuture.get(20, TimeUnit.SECONDS);
+        } catch (final ExecutionException | TimeoutException e) {
             return Optional.empty();
         }
-
-
-        return Optional.ofNullable(playerNameCache.getIfPresent(uuid));
     }
 
     private String uuidShorter(final UUID uuid) {

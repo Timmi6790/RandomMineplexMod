@@ -2,7 +2,10 @@ package de.timmi6790.mpmod.utilities;
 
 import lombok.experimental.UtilityClass;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collection;
+import java.util.List;
 import java.util.concurrent.ThreadLocalRandom;
 import java.util.regex.Pattern;
 
@@ -63,9 +66,8 @@ public class DataUtilities {
     }
 
     public void shuffleArray(final int[] array) {
-        final Random rnd = ThreadLocalRandom.current();
         for (int index = array.length - 1; index > 0; index--) {
-            final int switchIndex = rnd.nextInt(index + 1);
+            final int switchIndex = ThreadLocalRandom.current().nextInt(index + 1);
             final int temp = array[switchIndex];
             array[switchIndex] = array[index];
             array[index] = temp;

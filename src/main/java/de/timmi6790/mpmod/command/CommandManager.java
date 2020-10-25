@@ -1,20 +1,22 @@
 package de.timmi6790.mpmod.command;
 
 import de.timmi6790.mpmod.events.mineplex.MineplexServerJoinEvent;
+import de.timmi6790.mpmod.utilities.EventUtilities;
 import net.minecraft.command.ICommand;
 import net.minecraftforge.client.ClientCommandHandler;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.network.FMLNetworkEvent;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 public class CommandManager {
     private final List<ICommand> mineplexOnlyCommands = new ArrayList<>();
-    private final Map<String, ICommand> registeredCommands = new HashMap<>();
-    private final Map<String, String> registeredCommandsAlias = new HashMap<>();
+
+    public CommandManager() {
+        EventUtilities.registerEvents(this);
+    }
 
     @SubscribeEvent
     public void onMineplexJoin(final MineplexServerJoinEvent event) {
@@ -25,33 +27,37 @@ public class CommandManager {
 
     @SubscribeEvent
     public void onServerLeave(final FMLNetworkEvent.ClientDisconnectionFromServerEvent event) {
-        final Map<String, ICommand> commandMap = ClientCommandHandler.instance.getCommands();
-
-        this.mineplexOnlyCommands.forEach(command -> {
-            commandMap.remove(command.getCommandName());
-
-            command.getCommandAliases().stream()
-                    .filter(alias -> {
-                        final ICommand icommand = commandMap.get(alias);
-                        return icommand != null && icommand.equals(command);
-                    })
-                    .forEach(commandMap::remove);
-        });
+        this.removeCommands(this.mineplexOnlyCommands.toArray(new ICommand[0]));
     }
 
     public void addCommands(final ICommand... commands) {
         for (final ICommand command : commands) {
-            final String commandNameLower = command.getCommandName().toLowerCase();
-            this.registeredCommands.put(commandNameLower, command);
-            for (final String alias : command.getCommandAliases()) {
-                this.registeredCommandsAlias.put(alias.toLowerCase(), commandNameLower);
-            }
+            this.addCommand(command);
+        }
+    }
 
-            if (MineplexOnlyCommand.class.isAssignableFrom(command.getClass())) {
-                this.mineplexOnlyCommands.add(command);
+    public void addCommand(final ICommand command) {
+        if (MineplexOnlyCommand.class.isAssignableFrom(command.getClass())) {
+            this.mineplexOnlyCommands.add(command);
 
-            } else {
-                ClientCommandHandler.instance.registerCommand(command);
+        } else {
+            ClientCommandHandler.instance.registerCommand(command);
+        }
+    }
+
+    public void removeCommands(final ICommand... commands) {
+        for (final ICommand command : commands) {
+            this.removeCommand(command);
+        }
+    }
+
+    public void removeCommand(final ICommand command) {
+        final Map<String, ICommand> commandMap = ClientCommandHandler.instance.getCommands();
+        commandMap.remove(command.getCommandName());
+
+        for (final String commandAlias : command.getCommandAliases()) {
+            if (command.equals(commandMap.get(commandAlias))) {
+                commandMap.remove(commandAlias);
             }
         }
     }

@@ -20,7 +20,8 @@ public class ImmortalGiveTabSupport extends AbstractTabSupport {
 
     @Override
     public void onTabSupport(final TabSupportData tabSupportData) {
-        if (!tabSupportData.getMessage().toLowerCase().startsWith("/ig") && !tabSupportData.getMessage().toLowerCase().startsWith("/e give")) {
+        if (!tabSupportData.getMessage().toLowerCase().startsWith("/ig")
+                && !tabSupportData.getMessage().toLowerCase().startsWith("/e give")) {
             return;
         }
 

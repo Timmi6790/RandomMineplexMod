@@ -1,6 +1,8 @@
 package de.timmi6790.mpmod.command;
 
 import de.timmi6790.mpmod.utilities.MessageBuilder;
+import lombok.Getter;
+import lombok.Setter;
 import net.minecraft.command.ICommandSender;
 import net.minecraft.util.BlockPos;
 import net.minecraft.util.EnumChatFormatting;
@@ -8,9 +10,15 @@ import org.apache.commons.lang3.StringUtils;
 
 import java.util.*;
 
+@Setter
+@Getter
 public abstract class AbstractCommandGroup extends AbstractCommand {
     private final List<AbstractCommand> subCommands = new ArrayList<>();
     private String[][] tabCompleteOptions = new String[0][0];
+    /**
+     * Stores the pre command group names, used for the help command
+     */
+    private String preCommand;
 
     public AbstractCommandGroup(final String commandName) {
         super(commandName);
@@ -32,14 +40,30 @@ public abstract class AbstractCommandGroup extends AbstractCommand {
         return Optional.empty();
     }
 
+    protected String getPreCommand() {
+        if (this.preCommand == null) {
+            return "";
+        }
+        return this.preCommand;
+    }
+
     @Override
     public void onCommand(final ICommandSender sender, final String[] args) {
         if (args.length == 0) {
-            final MessageBuilder helpMessage = new MessageBuilder(StringUtils.capitalize(this.getCommandName()) + "-Command\n", EnumChatFormatting.GOLD);
+            final MessageBuilder helpMessage = new MessageBuilder(
+                    StringUtils.capitalize(this.getCommandName()) + "-Command\n",
+                    EnumChatFormatting.GOLD
+            );
             for (final AbstractCommand command : this.subCommands) {
-                helpMessage.addMessage("\n" + "/" + this.getCommandName() + " " + command.getCommandName() + " " + String.join(" ", command.getSyntax()), EnumChatFormatting.YELLOW);
+                helpMessage.addMessage(
+                        EnumChatFormatting.YELLOW,
+                        "\n/%s %s %s",
+                        this.getPreCommand() + this.getCommandName(),
+                        command.getCommandName(),
+                        String.join(" ", command.getSyntax())
+                );
             }
-            helpMessage.sendToPlayerWithBox();
+            helpMessage.addBoxedToMessage().sendToPlayer();
             return;
         }
 
@@ -84,6 +108,11 @@ public abstract class AbstractCommandGroup extends AbstractCommand {
 
     protected final void registerSubCommands(final AbstractCommand... commands) {
         for (final AbstractCommand command : commands) {
+            if (command instanceof AbstractCommandGroup) {
+                final AbstractCommandGroup commandGroup = (AbstractCommandGroup) command;
+                commandGroup.setPreCommand(this.getPreCommand() + this.getCommandName() + " ");
+            }
+
             this.registerSubCommand(command);
         }
     }

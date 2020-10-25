@@ -1,11 +1,15 @@
 package de.timmi6790.mpmod.values;
 
 import de.timmi6790.mpmod.utilities.StringUtilities;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
+@Getter
+@AllArgsConstructor
 public enum MinecraftColours {
     DARK_RED("&4"),
     RED("&c"),
@@ -25,10 +29,6 @@ public enum MinecraftColours {
     BLACK("&0");
 
     private final String colourCode;
-
-    MinecraftColours(final String colourCode) {
-        this.colourCode = colourCode;
-    }
 
     public static List<String> getAllColourNames() {
         final List<String> colourNames = new ArrayList<>();
@@ -57,9 +57,5 @@ public enum MinecraftColours {
         }
 
         return name.toString();
-    }
-
-    public String getColourCode() {
-        return this.colourCode;
     }
 }

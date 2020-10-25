@@ -1,11 +1,12 @@
 package de.timmi6790.mpmod.modules.community.tabsupport;
 
-import de.timmi6790.commons.utilities.EnumUtilities;
-import de.timmi6790.mpmod.McMod;
+import de.timmi6790.mpmod.ModCache;
 import de.timmi6790.mpmod.tabsupport.AbstractTabSupport;
 import de.timmi6790.mpmod.tabsupport.TabSupportData;
 import de.timmi6790.mpmod.utilities.DataUtilities;
+import de.timmi6790.mpmod.utilities.EnumUtilities;
 import de.timmi6790.mpmod.values.BukkitValues;
+import de.timmi6790.mpmod.values.MineplexValues;
 import lombok.Getter;
 
 import java.util.*;
@@ -23,9 +24,13 @@ public class TabSupportEventCommand extends AbstractTabSupport {
     private static final String[] SUGGESTED_EFFECT_LEVEL = {"1", "5", "10", "50", "100", "200", "255"};
     private static final String[] SUGGESTED_EFFECT_TIME = {"10", "100", "200", "1000", "1000000"};
 
-    public TabSupportEventCommand() {
+    private final ModCache modCache;
+
+    public TabSupportEventCommand(final ModCache modCache) {
         super("/e");
         this.setCancelServerRequest(true);
+
+        this.modCache = modCache;
     }
 
     @Override
@@ -162,7 +167,7 @@ public class TabSupportEventCommand extends AbstractTabSupport {
 
     private void handleGadgetOptions(final TabSupportData tabSupportData, final String[] args) {
         if (args.length == 3) {
-            final List<String> values = new ArrayList<>(Arrays.asList(BukkitValues.getCosmetics()));
+            final List<String> values = new ArrayList<>(Arrays.asList(MineplexValues.getCosmetics()));
             values.addAll(Arrays.asList("clear", "list"));
 
             tabSupportData.setTabReturn(this.getStartWithIgnoreCase(values, args[2]));
@@ -171,7 +176,7 @@ public class TabSupportEventCommand extends AbstractTabSupport {
 
     private void handleTempGadgetOptions(final TabSupportData tabSupportData, final String[] args) {
         if (args.length == 3) {
-            tabSupportData.setTabReturn(this.getStartWithIgnoreCase(BukkitValues.getCosmetics(), args[2]));
+            tabSupportData.setTabReturn(this.getStartWithIgnoreCase(MineplexValues.getCosmetics(), args[2]));
         }
     }
 
@@ -260,8 +265,8 @@ public class TabSupportEventCommand extends AbstractTabSupport {
     private void handleGamekitOptions(final TabSupportData tabSupportData, final String[] args) {
         if (args.length == 3) {
             tabSupportData.setTabReturn(this.getStartWithIgnoreCase(this.getAllPlayersInLobby(), args[2]));
-        } else if (args.length == 4 && McMod.getModCache().getCurrentGame() != null) {
-            tabSupportData.setTabReturn(this.getStartWithIgnoreCase(McMod.getModCache().getCurrentGame().getKits(), args[3]));
+        } else if (args.length == 4 && this.modCache.getCurrentGame() != null) {
+            tabSupportData.setTabReturn(this.getStartWithIgnoreCase(this.modCache.getCurrentGame().getKits(), args[3]));
         }
     }
 

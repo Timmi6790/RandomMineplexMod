@@ -1,6 +1,5 @@
 package de.timmi6790.mpmod.utilities;
 
-import de.timmi6790.mpmod.McMod;
 import net.minecraft.event.ClickEvent;
 import net.minecraft.event.HoverEvent;
 import net.minecraft.util.ChatComponentText;
@@ -33,6 +32,10 @@ public class MessageBuilder {
 
     public MessageBuilder addMessage(final String message) {
         return this.addMessage(message, this.messageObject.getChatStyle().getColor());
+    }
+
+    public MessageBuilder addMessage(final EnumChatFormatting colour, final String format, final Object... objects) {
+        return this.addMessage(String.format(format, objects), colour);
     }
 
     public MessageBuilder addMessage(final String message, final EnumChatFormatting colour) {
@@ -120,25 +123,22 @@ public class MessageBuilder {
         Shortcuts.getPlayer().ifPresent(player -> player.addChatMessage(this.messageObject));
     }
 
-    public void sendToPlayerWithBox() {
-        this.sendToPlayerWithBox(EnumChatFormatting.GREEN);
+    public MessageBuilder addBoxedToMessage() {
+        return this.addBoxedToMessage(EnumChatFormatting.GREEN);
     }
 
-    public void sendToPlayerWithBox(final EnumChatFormatting colour) {
-        new MessageBuilder("")
+    public MessageBuilder addBoxedToMessage(final EnumChatFormatting colour) {
+        return new MessageBuilder("")
                 .addMessage(new MessageBuilder("\n=============================================\n\n", colour)
                         .setStrikethrough()
                         .setBold())
-
                 .addMessage(this.messageObject)
-
                 .addMessage(new MessageBuilder("\n\n=============================================\n", colour)
                         .setStrikethrough()
-                        .setBold())
-                .sendToPlayer();
+                        .setBold());
     }
 
-    public void sendToPlayerDelayed(final int delay) {
-        McMod.getTaskScheduler().schedule(delay, MessageBuilder.this::sendToPlayer);
+    public void sendToPlayerDelayed(final int tickDelay) {
+        TaskScheduler.getInstance().schedule(tickDelay, MessageBuilder.this::sendToPlayer);
     }
 }

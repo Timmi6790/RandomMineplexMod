@@ -20,13 +20,17 @@ public class PacketReceiveEvent extends Event {
 
     @Cancelable
     public static class Pre extends PacketReceiveEvent {
-        public Pre(final INetHandler packetListener, final Packet packet, final ChannelHandlerContext channelHandlerContext) {
+        public Pre(final INetHandler packetListener,
+                   final Packet packet,
+                   final ChannelHandlerContext channelHandlerContext) {
             super(packetListener, channelHandlerContext, packet);
         }
     }
 
     public static class Post extends PacketReceiveEvent {
-        public Post(final INetHandler packetListener, final Packet packet, final ChannelHandlerContext channelHandlerContext) {
+        public Post(final INetHandler packetListener,
+                    final Packet packet,
+                    final ChannelHandlerContext channelHandlerContext) {
             super(packetListener, channelHandlerContext, packet);
         }
     }

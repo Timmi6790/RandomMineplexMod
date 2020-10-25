@@ -1,107 +1,109 @@
 package de.timmi6790.mpmod;
 
 import de.timmi6790.mpmod.command.CommandManager;
+import de.timmi6790.mpmod.listeners.UpdateChecker;
 import de.timmi6790.mpmod.listeners.events.EventListener;
 import de.timmi6790.mpmod.listeners.events.MineplexEventListener;
 import de.timmi6790.mpmod.modules.AbstractModule;
-import de.timmi6790.mpmod.modules.community.CommunityModule;
 import de.timmi6790.mpmod.tabsupport.TabSupportManager;
-import de.timmi6790.mpmod.utilities.TaskScheduler;
+import de.timmi6790.mpmod.utilities.EventUtilities;
 import lombok.Getter;
+import lombok.Setter;
 import lombok.extern.log4j.Log4j2;
-import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.common.config.Configuration;
 import net.minecraftforge.fml.common.Mod;
-import net.minecraftforge.fml.common.Mod.EventHandler;
 import net.minecraftforge.fml.common.event.FMLInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
+import org.reflections.Reflections;
 
 import java.io.File;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Optional;
+import java.util.Set;
 
 @Mod(
         modid = Reference.MODID,
         name = Reference.NAME,
         version = Reference.VERSION,
-        acceptedMinecraftVersions = Reference.MC_VERSION,
-        guiFactory = Reference.GUI_FACTORY_CLASS,
+        acceptedMinecraftVersions = "1.8.9",
+        guiFactory = "de.timmi6790.mpmod.gui.GuiFactory",
         clientSideOnly = true
 )
 @Log4j2
+@Getter
+@Setter
 public class McMod {
-    private static final Map<Class<? extends AbstractModule>, AbstractModule> modules = new HashMap<>();
     @Getter
-    private static final ModCache modCache = new ModCache();
-    @Getter
-    private static final TaskScheduler taskScheduler = new TaskScheduler();
-    @Getter
-    private static final TabSupportManager tabSupportManager = new TabSupportManager();
-    @Getter
-    private static final CommandManager commandManager = new CommandManager();
-    @Getter
-    private static Configuration configuration;
-    private static String configDirectory;
+    @Mod.Instance(value = Reference.MODID)
+    private static McMod instance;
 
-    private static void addModules(final AbstractModule... modules) {
+    private final Map<Class<? extends AbstractModule>, AbstractModule> modules = new HashMap<>();
+
+    private final ModCache modCache = new ModCache();
+    private final TabSupportManager tabSupportManager = new TabSupportManager();
+    private final CommandManager commandManager = new CommandManager();
+    private Configuration configuration;
+    private String configDirectory;
+
+    private final String modId = Reference.MODID;
+    private final String modName = Reference.NAME;
+    private final String versionUrl = Reference.VERSION_URL;
+    private final String version = Reference.VERSION;
+    private final String downloadUrl = Reference.DOWNLOAD_URL;
+
+    private void loadModules() {
+        final Reflections reflections = new Reflections("de.timmi6790");
+        final Set<Class<? extends AbstractModule>> modules = reflections.getSubTypesOf(AbstractModule.class);
+        for (final Class<? extends AbstractModule> module : modules) {
+            try {
+                this.addModules(module.getConstructor(McMod.class).newInstance(this));
+            } catch (final Exception e) {
+                log.error("Trying to initialize {}", module, e);
+            }
+        }
+    }
+
+    public <T extends AbstractModule> Optional<T> getModule(final Class<T> clazz) {
+        return (Optional<T>) Optional.ofNullable(this.modules.get(clazz));
+    }
+
+    public <T extends AbstractModule> T getModuleOrThrow(final Class<T> clazz) {
+        return this.getModule(clazz).orElseThrow(RuntimeException::new);
+    }
+
+    protected void addModules(final AbstractModule... modules) {
         for (final AbstractModule module : modules) {
-            McMod.modules.put(module.getClass(), module);
+            this.modules.put(module.getClass(), module);
         }
     }
 
-    public static <T extends AbstractModule> Optional<T> getModule(final Class<T> clazz) {
-        return (Optional<T>) Optional.ofNullable(modules.get(clazz));
-    }
 
-    public static <T extends AbstractModule> T getModuleOrThrow(final Class<T> clazz) {
-        return getModule(clazz).orElseThrow(RuntimeException::new);
-    }
-
-    public static void registerEvents(final Object... events) {
-        for (final Object event : events) {
-            MinecraftForge.EVENT_BUS.register(event);
-        }
-    }
-
-    public static void unRegisterEvents(final Object... events) {
-        for (final Object event : events) {
-            MinecraftForge.EVENT_BUS.unregister(event);
-        }
-    }
-
-    @EventHandler
+    @Mod.EventHandler
     public void preInit(final FMLPreInitializationEvent event) {
-        addModules(
-                new CommunityModule()
-        );
+        this.configDirectory = event.getModConfigurationDirectory().toString();
+        final File path = new File(this.configDirectory + File.separator + this.getModId() + ".cfg");
+        this.configuration = new Configuration(path);
 
-        configDirectory = event.getModConfigurationDirectory().toString();
-        if (configuration == null) {
-            final File path = new File(configDirectory + "/" + Reference.MODID + ".cfg");
-            configuration = new Configuration(path);
-        }
+        this.loadModules();
 
-        for (final AbstractModule module : McMod.modules.values()) {
+        for (final AbstractModule module : this.getModules().values()) {
             log.info("PreInnit module {}", module.getName());
             module.preInit(event);
         }
     }
 
-    @EventHandler
+    @Mod.EventHandler
     public void init(final FMLInitializationEvent event) {
-        for (final AbstractModule module : modules.values()) {
+        for (final AbstractModule module : this.getModules().values()) {
             log.info("Innit module {}", module.getName());
             module.init(event);
         }
 
-        registerEvents(
-                this,
-                tabSupportManager,
-                taskScheduler,
-                commandManager,
-                new MineplexEventListener(),
-                new EventListener()
+        EventUtilities.registerEvents(
+                new MineplexEventListener(this),
+                new EventListener(),
+                new UpdateChecker(this)
         );
     }
 }

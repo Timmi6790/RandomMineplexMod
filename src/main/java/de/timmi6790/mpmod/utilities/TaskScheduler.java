@@ -3,6 +3,7 @@ package de.timmi6790.mpmod.utilities;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.Getter;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.gameevent.TickEvent;
@@ -12,19 +13,22 @@ import java.util.Collections;
 import java.util.List;
 
 public class TaskScheduler {
-    private final List<Task> items = Collections.synchronizedList(new ArrayList<>());
+    @Getter
+    private static final TaskScheduler instance = new TaskScheduler();
+
+    private final List<Task> taskList = Collections.synchronizedList(new ArrayList<>());
 
     public TaskScheduler() {
         MinecraftForge.EVENT_BUS.register(this);
     }
 
     public void schedule(final int ticksToWait, final Runnable runnable) {
-        this.items.add(new Task(runnable, ticksToWait));
+        this.taskList.add(new Task(runnable, ticksToWait));
     }
 
     @SubscribeEvent
-    public void clientTick(final TickEvent.ClientTickEvent event) {
-        this.items.removeIf(Task::execute);
+    public void onTick(final TickEvent.ClientTickEvent event) {
+        this.taskList.removeIf(Task::execute);
     }
 
     @Data

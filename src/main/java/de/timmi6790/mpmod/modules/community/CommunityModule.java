@@ -17,35 +17,35 @@ public class CommunityModule extends AbstractModule {
     private final CommunityCache cache = new CommunityCache();
     private CommunityConfig config;
 
-    public CommunityModule() {
-        super("Community");
+    public CommunityModule(final McMod mod) {
+        super(mod, "Community");
     }
 
     @Override
     public void preInit(final FMLPreInitializationEvent event) {
-        this.config = new CommunityConfig(McMod.getConfiguration());
+        this.config = new CommunityConfig(this, this.getMod().getConfiguration());
     }
 
     @Override
     public void init(final FMLInitializationEvent event) {
-        registerEvents(
+        this.registerEvents(
                 this,
                 new CrashPotionFix(),
-                new ClansTexturePackDenyFix(),
+                new ClansTexturePackDenyFix(this),
                 this.config
         );
 
-        McMod.getCommandManager().addCommands(
-                new BarrierCommand()
+        this.getMod().getCommandManager().addCommands(
+                new BarrierCommand(this)
         );
 
-        McMod.getTabSupportManager().registerTabSupports(
+        this.getMod().getTabSupportManager().registerTabSupports(
                 new PlayerNamesOverrideTabSupport(
                         "/stats",
                         "/party",
                         "/z"
                 ),
-                new TabSupportEventCommand(),
+                new TabSupportEventCommand(this.getMod().getModCache()),
                 new ImmortalGiveTabSupport()
         );
     }

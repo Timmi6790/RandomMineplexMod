@@ -1,6 +1,5 @@
 package de.timmi6790.mpmod.modules.community.commands;
 
-import de.timmi6790.mpmod.McMod;
 import de.timmi6790.mpmod.command.AbstractCommand;
 import de.timmi6790.mpmod.modules.community.CommunityCache;
 import de.timmi6790.mpmod.modules.community.CommunityModule;
@@ -10,15 +9,18 @@ import net.minecraft.command.ICommandSender;
 import net.minecraft.util.EnumChatFormatting;
 
 public class BarrierCommand extends AbstractCommand {
-    public BarrierCommand() {
-        super("barrier");
+    private final CommunityModule communityModule;
 
+    public BarrierCommand(final CommunityModule communityModule) {
+        super("barrier");
         this.setPrefix("Debug");
+
+        this.communityModule = communityModule;
     }
 
     @Override
     public void onCommand(final ICommandSender sender, final String[] args) {
-        final CommunityCache communityCache = McMod.getModuleOrThrow(CommunityModule.class).getCache();
+        final CommunityCache communityCache = this.communityModule.getCache();
 
         if (communityCache.isShowBarrier()) {
             communityCache.setShowBarrier(false);

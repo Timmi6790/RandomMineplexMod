@@ -4,6 +4,7 @@ import lombok.Getter;
 
 import java.util.Optional;
 
+@Getter
 public enum MineplexGames {
     ALIEN_INVASION("", "Player"),
     AREA_51_RAID("", "MilitarySniper", "MilitaryPolice", "MilitaryMedic", "NarutoRunner", "Kyle", "Chad"),
@@ -69,14 +70,12 @@ public enum MineplexGames {
     LOBBY("Lobby"),
     STAFF("Staff");
 
-    @Getter
     private final String name;
-
     private final String[] kits;
 
     MineplexGames(final String name, final String... kits) {
         this.name = name;
-        this.kits = kits;
+        this.kits = kits.clone();
     }
 
     public static Optional<MineplexGames> getGameByName(final String name) {
