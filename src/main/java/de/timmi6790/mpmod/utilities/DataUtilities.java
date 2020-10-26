@@ -11,21 +11,33 @@ import java.util.regex.Pattern;
 
 @UtilityClass
 public class DataUtilities {
-    private final Pattern INTEGER_PATTERN = Pattern.compile("^-?\\d+$");
-    private final Pattern FLOAT_PATTERN = Pattern.compile("[+-]?(\\d+|\\d+\\.\\d+|\\.\\d+|\\d+\\.)([eE]\\d+)?");
-    private final Pattern DOUBLE_PATTERN = Pattern.compile("[\\x00-\\x20]*[+-]?(((((\\p{Digit}+)(\\.)?((\\p{Digit}+)?)([eE][+-]?(\\p{Digit}+))?)|(\\.((\\p{Digit}+))([eE][+-]?(\\p{Digit}+))?)|(((0[xX](\\p{XDigit}+)(\\.)?)|(0[xX](\\p{XDigit}+)?(\\.)(\\p{XDigit}+)))[pP][+-]?(\\p{Digit}+)))[fFdD]?))[\\x00-\\x20]*");
     private final Pattern BOOLEAN_PATTERN = Pattern.compile("true|false", Pattern.CASE_INSENSITIVE);
 
     public boolean isInt(final Object value) {
-        return INTEGER_PATTERN.matcher(String.valueOf(value)).matches();
+        try {
+            Integer.parseInt(String.valueOf(value));
+            return true;
+        } catch (final NumberFormatException ignore) {
+            return false;
+        }
     }
 
     public boolean isDouble(final Object value) {
-        return DOUBLE_PATTERN.matcher(String.valueOf(value)).matches();
+        try {
+            Double.parseDouble(String.valueOf(value));
+            return true;
+        } catch (final NumberFormatException ignore) {
+            return false;
+        }
     }
 
     public boolean isFloat(final Object value) {
-        return FLOAT_PATTERN.matcher(String.valueOf(value)).matches();
+        try {
+            Float.parseFloat(String.valueOf(value));
+            return true;
+        } catch (final NumberFormatException ignore) {
+            return false;
+        }
     }
 
     public boolean isBoolean(final Object value) {
@@ -33,7 +45,7 @@ public class DataUtilities {
     }
 
     public boolean hasEmptyArg(final String[] args, final int position) {
-        return (args.length == position + 1 && args[position].length() == 0);
+        return args.length == position + 1 && args[position].length() == 0;
     }
 
     public List<String> getStartWithIgnoreCase(final Collection<String> options, final String start) {

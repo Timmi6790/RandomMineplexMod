@@ -24,6 +24,14 @@ public abstract class AbstractCommandGroup extends AbstractCommand {
         super(commandName);
     }
 
+    public String[][] getTabCompleteOptions() {
+        return this.tabCompleteOptions.clone();
+    }
+
+    public void setTabCompleteOptions(final String[][] tabCompleteOptions) {
+        this.tabCompleteOptions = tabCompleteOptions.clone();
+    }
+
     protected Optional<AbstractCommand> getSubCommand(final String name) {
         for (final AbstractCommand command : this.subCommands) {
             if (command.getCommandName().equalsIgnoreCase(name)) {
