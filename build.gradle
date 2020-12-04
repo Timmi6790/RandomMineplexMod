@@ -11,7 +11,6 @@ buildscript {
         classpath 'com.github.jengelman.gradle.plugins:shadow:4.0.4'
         classpath 'net.minecraftforge.gradle:ForgeGradle:2.1-SNAPSHOT'
         classpath 'org.spongepowered:mixingradle:0.6-SNAPSHOT'
-        classpath 'com.github.Timmi6790:Commons:4e06ba7769'
     }
 }
 
@@ -20,6 +19,10 @@ repositories {
     mavenCentral()
     maven { url = 'http://repo.spongepowered.org/maven/' }
     maven { url = 'https://jitpack.io' }
+}
+
+plugins {
+    id "org.sonarqube" version "3.0"
 }
 
 apply plugin: 'java'
@@ -126,4 +129,11 @@ shadowJar {
 artifacts {
     archives jar
     archives shadowJar
+}
+
+sonarqube {
+    properties {
+        property "sonar.projectKey", "RandomMineplexMod"
+        property "sonar.host.url", "https://sonarcube.timmi6790.de"
+    }
 }
