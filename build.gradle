@@ -47,7 +47,7 @@ dependencies {
     compile 'com.github.ben-manes.caffeine:caffeine:2.8.5'
     compile 'org.reflections:reflections:0.9.12'
 
-    compileOnly 'org.projectlombok:lombok:1.18.12'
+    compileOnly 'org.projectlombok:lombok:1.18.16'
     annotationProcessor 'org.projectlombok:lombok:1.18.12'
 
     implementation 'com.github.Timmi6790:Commons:4e06ba7769'
