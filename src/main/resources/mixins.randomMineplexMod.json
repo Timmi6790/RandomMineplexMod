@@ -1,7 +1,7 @@
 {
   "required": true,
   "refmap": "mixins.randomMineplexMod.refmap.json",
-  "package": "de.timmi6790.mpmod.mixins",
+  "package": "de.timmi6790.rmmod.mixins",
   "compatibilityLevel": "JAVA_8",
   "mixins": [
     "blocks.MixinBlockBarrier",

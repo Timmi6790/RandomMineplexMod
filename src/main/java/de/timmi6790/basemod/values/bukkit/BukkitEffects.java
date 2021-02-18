@@ -1,0 +1,29 @@
+package de.timmi6790.basemod.values.bukkit;
+
+public enum BukkitEffects {
+    SPEED,
+    SLOW,
+    FAST_DIGGING,
+    SLOW_DIGGING,
+    INCREASE_DAMAGE,
+    HEAL,
+    HARM,
+    JUMP,
+    CONFUSION,
+    REGENERATION,
+    DAMAGE_RESISTANCE,
+    FIRE_RESISTANCE,
+    WATER_BREATHING,
+    INVISIBILITY,
+    BLINDNESS,
+    NIGHT_VISION,
+    HUNGER,
+    WEAKNESS,
+    POISON,
+    WITHER,
+    HEALTH_BOOST,
+    ABSORPTION,
+    SATURATION,
+    GLOWING,
+    LEVITATION
+}
