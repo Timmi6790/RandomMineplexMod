@@ -43,7 +43,8 @@ public class CommunityModule extends AbstractModule {
                 new PlayerNamesTabSupport(
                         "/stats",
                         "/party",
-                        "/z"
+                        "/z",
+                        "/skin"
                 ),
                 new EventCommandTabSupport(this.getMod().getModCache()),
                 new ImmortalGiveTabSupport()
