@@ -44,7 +44,9 @@ public class CommunityModule extends AbstractModule {
                         "/stats",
                         "/party",
                         "/z",
-                        "/skin"
+                        "/skin",
+                        "/skins",
+                        "/skinchanger"
                 ),
                 new EventCommandTabSupport(this.getMod().getModCache()),
                 new ImmortalGiveTabSupport()
