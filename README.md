@@ -8,6 +8,7 @@ A random mineplex forge 1.8.9 mod.
     - /party
     - /ig
     - /e
+    - /skin
 - Fixes
     - Jump potion crash
     - Clans texturepack enforcement (That is clearly a fix)
