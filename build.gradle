@@ -27,7 +27,7 @@ apply plugin: 'com.github.johnrengelman.shadow'
 apply plugin: 'net.minecraftforge.gradle.forge'
 apply plugin: 'org.spongepowered.mixin'
 
-version = '1.0.1'
+version = '1.0.2'
 group = 'de.timmi6790.basemod'
 archivesBaseName = 'RandomMineplexMod'
 
