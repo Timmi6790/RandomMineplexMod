@@ -37,7 +37,7 @@ compileJava.options.encoding = 'UTF-8'
 
 dependencies {
     // Enabled me only for build
-    annotationProcessor 'org.spongepowered:mixin:0.7.11-SNAPSHOT'
+    annotationProcessor 'org.spongepowered:mixin:0.8.5-SNAPSHOT'
     compile('org.spongepowered:mixin:0.7.11-SNAPSHOT') {
         // Mixin includes a lot of dependencies that are too up-to-date
         exclude module: 'guava'
