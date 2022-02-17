@@ -45,6 +45,30 @@ public class EnumUtilities {
     }
 
     /**
+     * Converts all enum value into Strings
+     *
+     * @param enumValue the enum value
+     * @return the names
+     */
+    public List<String> getNamesAsString(@NonNull final Enum[] enumValue) {
+        return Arrays.stream(enumValue)
+                .map(EnumUtilities::getNameAsString)
+                .collect(Collectors.toList());
+    }
+
+    /**
+     * Converts a enum value into text.
+     * TEST_Value -> TEST_Value
+     *
+     * @param enumValue the enum value
+     * @return the name
+     */
+
+    public String getNameAsString(@NonNull final Enum enumValue) {
+        return enumValue.name();
+    }
+
+    /**
      * Searches for the search string against the given enum values. All enum values are checked with their pretty name
      * {@link #getPrettyName(Enum)}}.
      *

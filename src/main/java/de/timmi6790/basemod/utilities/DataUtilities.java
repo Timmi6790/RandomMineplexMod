@@ -117,4 +117,13 @@ public class DataUtilities {
 
         return newValues;
     }
+
+    public List<String> collectionToUpperCase(final Collection<String> values) {
+        final List<String> newValues = new ArrayList<>();
+        for (final String value : values) {
+            newValues.add(value.toUpperCase());
+        }
+
+        return newValues;
+    }
 }
