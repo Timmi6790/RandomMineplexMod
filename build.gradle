@@ -2,15 +2,15 @@ buildscript {
     repositories {
         jcenter()
         mavenCentral()
-        maven { url = 'https://files.minecraftforge.net/maven' }
+        maven { url = 'https://maven.minecraftforge.net/' }
         maven { url = 'https://repo.spongepowered.org/maven' }
         maven { url = 'https://jitpack.io' }
     }
 
     dependencies {
         classpath 'com.github.jengelman.gradle.plugins:shadow:4.0.4'
-        classpath 'net.minecraftforge.gradle:ForgeGradle:2.1-SNAPSHOT'
-        classpath 'org.spongepowered:mixingradle:0.6-SNAPSHOT'
+        classpath 'com.github.asbyth:ForgeGradle:6f53277'
+        classpath 'com.github.xcfrg:MixinGradle:0.6-SNAPSHOT'
     }
 }
 
@@ -27,7 +27,7 @@ apply plugin: 'com.github.johnrengelman.shadow'
 apply plugin: 'net.minecraftforge.gradle.forge'
 apply plugin: 'org.spongepowered.mixin'
 
-version = '1.0.2'
+version = '1.0.3'
 group = 'de.timmi6790.basemod'
 archivesBaseName = 'RandomMineplexMod'
 
