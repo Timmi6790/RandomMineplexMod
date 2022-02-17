@@ -132,7 +132,7 @@ public class ImmortalGiveTabSupport extends AbstractTabSupport {
         final String[] enchantParts = lastArg.split(",");
         final String[] lastEnchantPart = enchantParts[enchantParts.length - 1].split(":");
 
-        final Set<String> enchantments = new HashSet<>(DataUtilities.collectionToLowerCase(EnumUtilities.getPrettyNames(BukkitEnchantments.values())));
+        final Set<String> enchantments = new HashSet<>(DataUtilities.collectionToUpperCase(EnumUtilities.getNamesAsString(BukkitEnchantments.values())));
         for (final String part : enchantParts) {
             final String[] split = part.split(":");
             if (split.length == 2) {
